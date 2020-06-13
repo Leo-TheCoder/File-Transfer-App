@@ -1,0 +1,11 @@
+﻿  main.cpp
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\Server\Server\main.cpp(93,10): warning C4101: 'recvbuf': unreferenced local variable
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\Server\Server\main.cpp(92,9): warning C4101: 'iSendResult': unreferenced local variable
+  ServerModules.cpp
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\Server\Server\ServerModules.cpp(60,20): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  185 of 195 functions (94.9%) were compiled, the rest were copied from previous compilation.
+    4 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Server.vcxproj -> D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\Server\Release\Server.exe
