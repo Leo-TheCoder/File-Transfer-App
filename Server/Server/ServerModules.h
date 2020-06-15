@@ -27,6 +27,10 @@
 using namespace std;
 
 int AcceptLogIn(SOCKET, vector <CUser>);
+int AcceptRegister(SOCKET, vector <CUser>&);
+
 
 int CheckUserForLoggingIn(char*, char*, vector <CUser>);
+int CheckUserForRegistering(char*, vector <CUser>);
 void ReadFileForUserDatabase(vector <CUser>&);
+void WriteNewUserToFile(CUser);
