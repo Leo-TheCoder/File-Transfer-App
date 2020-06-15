@@ -1,0 +1,13 @@
+﻿  Client.cpp
+F:\MMT\Project_Server_Client\Client\Client.cpp(34,7): warning C4101:  'Buffer': unreferenced local variable
+  User.cpp
+F:\MMT\Project_Server_Client\Client\Client.cpp(35,6): warning C4101:  'length': unreferenced local variable
+F:\MMT\Project_Server_Client\Client\User.cpp(78,20): warning C4018:  '<': signed/unsigned mismatch
+F:\MMT\Project_Server_Client\Client\User.cpp(89,20): warning C4018:  '<': signed/unsigned mismatch
+  Generating code
+F:\MMT\Project_Server_Client\Client\Client.cpp(271): warning C4715: 'logIn': not all control paths return a value
+  Finished generating code
+  3 of 133 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Client.vcxproj -> F:\MMT\Project_Server_Client\Release\Client.exe
