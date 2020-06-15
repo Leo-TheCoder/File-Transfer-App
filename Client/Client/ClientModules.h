@@ -22,3 +22,4 @@
 using namespace std;
 
 int LogIn(SOCKET);
+int Register(SOCKET);
