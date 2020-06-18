@@ -39,5 +39,7 @@ public:
 	//Ret 2: user đang hoạt động
 	int checkList(User guess);
 	//Dùng username để get user
-	User* getUserByName(string);
+	void setUserStatusByName(string, bool);
+	//Thêm user mới vào list, cập nhật lại file
+	void addNewUser(User a);
 };

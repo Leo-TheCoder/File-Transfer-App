@@ -108,15 +108,36 @@ int ListUser::checkList(User guess)
 	return 0;
 }
 
-User* ListUser::getUserByName(string name)
+void ListUser::setUserStatusByName(string name, bool stt)
 {
-	User* res = NULL;
 	for (int i = 0; listUsers.size(); i++)
+	{
+		string tmp = listUsers[i].getUsername();
+		if (name == tmp)
+		{
+			listUsers[i].setStatus(stt);
+			return;
+		}
+	}
+}
+
+bool ListUser::existUsername(string name)
+{
+	for (int i = 0; i < listUsers.size(); i++)
 	{
 		if (name == listUsers[i].getUsername())
 		{
-			res = &listUsers[i];
+			return true;
 		}
 	}
-	return res;
+	return false;
+}
+
+void ListUser::addNewUser(User a)
+{
+	listUsers.push_back(a);
+	freopen("accounts.txt", "a+", stdout);
+	cout << a.getUsername() << "," << a.getPassword() << endl;
+	freopen("CON", "a", stdout);
+	cout.clear();
 }

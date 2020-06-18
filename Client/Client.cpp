@@ -22,6 +22,11 @@ DWORD WINAPI recvFromServer(LPVOID socket);
 //Ret 2: Account đang được sử dụng
 int logIn(SOCKET server);
 
+//Hàm xử lí quá trình đăng kí
+//Ret 1: thành công
+//Ret -1: lỗi
+int signUp(SOCKET server);
+
 int main()
 {
 	WORD wVersionRequested;
@@ -147,13 +152,40 @@ int main()
 	}
 
 	DWORD thread;
-	int res = logIn(socket_descriptor);				//Xử lí đăng nhập
-	if (res != 1)	//Nếu đăng nhập thất bại thì tắt client
+
+	int choice = 0;
+	cout << "Sign up(0) or Login(1): ";
+	cin >> choice;
+	cin.ignore();
+	cin.clear();
+	
+	string sChoice = to_string(choice);
+
+	//Báo cho server biết client muốn làm gì
+	int bytes = send(socket_descriptor, sChoice.c_str(), sChoice.length() + 1, 0);
+	if (bytes == SOCKET_ERROR || bytes <= 0)
 	{
 		_getch();
 		closesocket(socket_descriptor);
 		return 1;
 	}
+
+	if (choice == 0)
+	{
+		int res = signUp(socket_descriptor);
+	}
+	else
+	{
+		int res = logIn(socket_descriptor);				//Xử lí đăng nhập
+		if (res != 1)	//Nếu đăng nhập thất bại thì tắt client
+		{
+			_getch();
+			closesocket(socket_descriptor);
+			return 1;
+		}
+	}
+
+	
 	
 	//Thread xử lí nhận dữ liệu từ server (log, download)
 	CreateThread(NULL, 0, recvFromServer, (LPVOID)socket_descriptor, 0, &thread);
@@ -162,7 +194,7 @@ int main()
 		//Main thread xử lí gửi dữ liệu (command, upload)
 		string sendStr;
 		getline(cin, sendStr);
-		int bytes = send(socket_descriptor, sendStr.c_str(), sendStr.length() + 1, 0);
+		bytes = send(socket_descriptor, sendStr.c_str(), sendStr.length() + 1, 0);
 
 		//Nếu gửi thất bại (kết nối thất bại) hay có lệnh hủy ("/quit") thì tắt client
 		if (bytes == 0 || bytes == SOCKET_ERROR || sendStr == "/quit")
@@ -268,4 +300,65 @@ int logIn(SOCKET server)
 			return 2;
 		}
 	}
+}
+
+
+int signUp(SOCKET server)
+{
+	User guess;					
+	string temp;
+	char buffer[1024];
+	int bytes = 0;
+	do			//Vòng lặp kiểm tra username cho đến khi nào hợp lệ
+	{
+		cout << "Username: ";
+		getline(cin, temp);
+
+		//Gửi username cho server check
+		bytes = send(server, temp.c_str(), temp.length() + 1, 0);
+		if (bytes == SOCKET_ERROR || bytes <= 0)
+		{
+			cout << "Sending fail!!\n";
+			return -1;
+		}
+
+		//Nhận thông báo thành công hay thất bại từ server
+		bytes = recv(server, buffer, sizeof(buffer), 0);
+		if (bytes == SOCKET_ERROR || bytes <= 0)
+		{
+			cout << "Receiving fail!!\n";
+			return -1;
+		}
+
+		if (strcmp(buffer, "1") == 0)	//Thành công
+		{
+			break;
+		}
+		//Nếu thất bại thì xuất dòng này
+		cout << "This username has already existed! Try again\n";
+		//Sau đó lặp lại quá trình
+	} while (1);
+
+	guess.setUsername(temp);
+	cout << "Password: ";
+	getline(cin, temp);
+	guess.setPassword(temp);
+
+	//Gửi password để server lưu lại
+	bytes = send(server, temp.c_str(), temp.length() + 1, 0);
+	if (bytes <= 0)
+	{
+		return -1;
+	}
+	
+	//Nhận thông báo thành công
+	bytes = recv(server, buffer, sizeof(buffer), 0);
+	if (bytes <= 0)
+	{
+		return -1;
+	}
+
+	cout << "Login sucessfully!\n";
+	return 1;
+	
 }

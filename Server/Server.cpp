@@ -18,6 +18,7 @@ ListUser users;								//Danh sách users
 vector<SOCKET> clients;						//Danh sách socket client đang kết nối
 vector<sockaddr_in> clients_sin;			//Danh sách các địa chỉ client tương ứng
 vector<string> username;					//Danh sách tên tài khoản client đang hoạt động tương ứng 
+vector<string> logServer;					//Danh sách các log đã được xuất trên server
 
 //Kiểm tra login thành công hay không
 //Ret 1: thành công
@@ -25,6 +26,11 @@ vector<string> username;					//Danh sách tên tài khoản client đang hoạt 
 //Ret 2: account đang được sử dụng
 //Trả về username sẽ là tên tk của client đó
 int checkLogIn(SOCKET client, ListUser& list, string& username);
+
+//Kiểm tra signup thành công hay không
+//Ret 1: thành công
+//Ret -1: lỗi 
+int checkSignUp(SOCKET client, ListUser& list, string& username);
 
 //Thread để server tương tác với client
 DWORD WINAPI threadClient(LPVOID socket)
@@ -34,13 +40,35 @@ DWORD WINAPI threadClient(LPVOID socket)
 	sockaddr_in sin = myClient->getSin();
 
 	string usernameStr;
-	
-	int res = checkLogIn(client, users, usernameStr);		//Kiểm tra kết quả đăng nhập
-	if (res == 0 || res == 2)						//Nếu đăng nhập lỗi
-	{												//Hoặc đăng nhập sai
-		closesocket(client);						//Hoặc đăng nhập vào tk đang được sử dụng
-		ExitThread(0);								//Thì thoát khỏi thread
+	char buffer[1024];
+
+	//Nhận xem client muốn đăng nhập hay đăng kí
+	int bytes = recv(client, buffer, sizeof(buffer), 0);
+	if (bytes == SOCKET_ERROR || bytes <= 0)
+	{
+		closesocket(client);
+		return 0;
 	}
+	if (strcmp(buffer, "0") == 0)	//Client muốn đăng kí
+	{
+		int res = checkSignUp(client, users, usernameStr);
+		if (res < 0)
+		{
+			closesocket(client);
+			return 0;
+		}
+		
+	}
+	else	//Client muốn đăng nhập
+	{
+		int res = checkLogIn(client, users, usernameStr);		//Kiểm tra kết quả đăng nhập
+		if (res == 0 || res == 2)						//Nếu đăng nhập lỗi
+		{												//Hoặc đăng nhập sai
+			closesocket(client);						//Hoặc đăng nhập vào tk đang được sử dụng
+			return 0;									//Thì thoát khỏi thread
+		}
+	}
+	
 
 	string sendStr;
 	username.push_back(usernameStr);				//Lưu tên tk vào danh sách hoạt động
@@ -48,17 +76,18 @@ DWORD WINAPI threadClient(LPVOID socket)
 	
 	sendStr = "Client #" + usernameStr + " has connected\n";
 	cout << sendStr;								//Xuất log trên server
+	logServer.push_back(sendStr);
 
 	for (int i = 0; i < clients.size(); i++)		//Xuất log đến các client khác
 	{
-		int bytes = send(clients[i], sendStr.c_str(), sendStr.length() + 1, 0);
+		bytes = send(clients[i], sendStr.c_str(), sendStr.length() + 1, 0);
 	}
 
 	clients.push_back(client);						//Thêm client này vào danh sách hoạt động
 	clients_sin.push_back(sin);
 	
 
-	char buffer[2048];
+
 
 	while (1)	//Vòng lặp nhận các tin nhắn đến từ client
 	{
@@ -69,7 +98,7 @@ DWORD WINAPI threadClient(LPVOID socket)
 			{
 				break;
 			}
-			printf("From #%d: %s\n", client, buffer);	//Xuất ra tin nhắn từ client
+			cout << "From #" << usernameStr << ": " << buffer << endl;	//Xuất ra tin nhắn từ client
 			strcpy(buffer, "");
 
 			//.................
@@ -90,8 +119,9 @@ DWORD WINAPI threadClient(LPVOID socket)
 	
 	sendStr = "Client #" + usernameStr + " has logged out\n";	//Xuất log ra server
 	cout << sendStr;
+	logServer.push_back(sendStr);
 
-	users.getUserByName(usernameStr)->setStatus(false);			//Điều chỉnh trạng thái đặng nhập lại cho user
+	users.setUserStatusByName(usernameStr, false);
 
 	//Xuất log ra các client còn lại
 	//Thông báo việc đăng xuất của client này
@@ -104,15 +134,19 @@ DWORD WINAPI threadClient(LPVOID socket)
 			clients.erase(clients.begin(), clients.begin() + i);
 			clients_sin.erase(clients_sin.begin(), clients_sin.begin() + i);
 			username.erase(username.begin(), username.begin() + i);
-			i--;
-			continue;
+			break;
 		}
+		
+	}
+
+	for (int i = 0; i < clients.size(); i++)
+	{
 		//Gửi thông báo đến client khác
-		int bytes = send(clients[i], sendStr.c_str(), sendStr.length() + 1, 0);
+		bytes = send(clients[i], sendStr.c_str(), sendStr.length() + 1, 0);
 	}
 	
 	//Thoát thread
-	ExitThread(0);
+	return 0;
 }
 
 int main()
@@ -177,7 +211,8 @@ int main()
 	int len_sin = sizeof(tmpClient_sin);		
 
 	CParam* myClient = new CParam;			//Struct dùng để truyền nhiều tham số vào thread
-	
+	HANDLE clientThread;
+
 	while (1)
 	{
 		//Accept the connection from client
@@ -187,7 +222,7 @@ int main()
 		myClient->setSin(tmpClient_sin);
 		
 		//Thread dùng để giải quyết riêng với client
-		CreateThread(NULL, 0, threadClient, (LPVOID)myClient, 0, &thread);
+		clientThread = CreateThread(NULL, 0, threadClient, (LPVOID)myClient, 0, &thread);
 		Sleep(50);
 
 		//------------------------WARNING------------------------------
@@ -256,4 +291,58 @@ int checkLogIn(SOCKET client, ListUser& list, string& username)
 		byte = send(client, buff, sizeof(buff), 0);
 		return 2;
 	}
+}
+
+
+int checkSignUp(SOCKET client, ListUser& list, string& username)
+{
+	char buffer[1024];
+	int bytes = 0;
+	string name = "";
+	string password = "";
+	while (1)			//Vòng lặp kiểm tra username nhập vào từ client cho đến khi hợp lệ
+	{
+		//Nhận username
+		bytes = recv(client, buffer, sizeof(buffer), 0);
+		if (bytes <= 0)
+		{
+			return -1;
+		}
+		
+		name = buffer;	
+		if (!list.existUsername(name)) {	//Kiểm tra xem username tồn tại hay chưa
+			bytes = send(client, "1", sizeof("1"), 0);	//Gửi thông báo thành công
+			if (bytes <= 0)
+			{
+				return -1;
+			}
+			break;
+		}
+		bytes = send(client, "0", sizeof("0"), 0);	//Gửi thông báo thất bại
+		if (bytes <= 0)
+		{
+			return -1;
+		}
+	}
+
+	bytes = recv(client, buffer, sizeof(buffer), 0);	//Nhận password
+	if (bytes <= 0)
+	{
+		return -1;
+	}
+	password = buffer;
+
+	User newUser;
+	newUser.setUsername(name);
+	username = name;
+	newUser.setPassword(password);
+	newUser.setStatus(true);	//Thiết lập trạng thái hoạt động
+	list.addNewUser(newUser);
+	bytes = send(client, "1", sizeof("1"), 0);	//Xác nhận lại với client rằng đăng nhập thành công
+	if (bytes <= 0)
+	{
+		return -1;
+	}
+	return 1;
+
 }
