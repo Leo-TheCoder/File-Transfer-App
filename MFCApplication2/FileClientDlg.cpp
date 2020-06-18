@@ -231,7 +231,7 @@ void CFileClientDlg::OnBnClickedOk()
 
 	CString textInput;
 	GetDlgItemText(IDC_EDIT1, textInput);
-	string ip(CW2A(textInput.GetString()));
+	string ip = textInput;
 
 	sin.sin_addr.s_addr = inet_addr(ip.c_str());	//Truyền IP đó vào sin
 	//------------WARNING------------------
@@ -251,7 +251,7 @@ void CFileClientDlg::OnBnClickedOk()
 	if (retcode == SOCKET_ERROR)
 	{
 		//txt.LoadString(IDC_STATIC2);
-		staResult.SetWindowText(L"Cannot connect to this server!");
+		staResult.SetWindowText("Cannot connect to this server!");
 		//printf("Can't connect to the server!\n");
 		return;
 	}

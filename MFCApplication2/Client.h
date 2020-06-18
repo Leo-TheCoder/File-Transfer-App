@@ -23,3 +23,9 @@ DWORD WINAPI recvFromServer(LPVOID socket, CListCtrl);
 //Ret 1: thành công
 //Ret 2: Account đang được sử dụng
 int LogIn(SOCKET server, string, string);
+
+//Hàm xử lí quá trình đăng kí
+//Ret 1: thành công
+//Ret -1: lỗi
+//Ret 0: trùng
+int Register(SOCKET server, string username, string password);

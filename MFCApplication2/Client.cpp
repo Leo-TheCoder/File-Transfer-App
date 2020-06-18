@@ -3,8 +3,6 @@
 #include "Client.h"
 #include "ClientScreenDlg.h"
 
-
-
 //Thread nhận dữ liệu từ server
 DWORD WINAPI recvFromServer(LPVOID socket)
 {
@@ -31,7 +29,6 @@ DWORD WINAPI recvFromServer(LPVOID socket)
 //Hàm xử lí đăng nhập
 int LogIn(SOCKET server, string username, string password)
 {
-
 	User guess;					//---------------------------
 	string temp;	
 	/*//---------------------------
@@ -75,4 +72,67 @@ int LogIn(SOCKET server, string username, string password)
 			return 2;
 		}
 	}
+}
+
+//XỬ lý đăng ký
+int Register(SOCKET server, string username, string password)
+{
+	User guess;
+	string temp;
+	char buffer[1024];
+	int bytes = 0;
+	do			//Vòng lặp kiểm tra username cho đến khi nào hợp lệ
+	{
+		temp = username;
+		cout << "\n";
+		//Gửi username cho server check
+		bytes = send(server, temp.c_str(), temp.length() + 1, 0);
+		if (bytes == SOCKET_ERROR || bytes <= 0)
+		{
+			//cout << "Sending fail!!\n";
+			return -1;
+		}
+
+		//Nhận thông báo thành công hay thất bại từ server
+		bytes = recv(server, buffer, sizeof(buffer), 0);
+		if (bytes == SOCKET_ERROR || bytes <= 0)
+		{
+			//cout << "Receiving fail!!\n";
+			return -1;
+		}
+		else if (strcmp(buffer, "1") == 0)	//Thành công
+		{
+			break;
+		}
+		else {
+			//Nếu thất bại thì xuất dòng này
+		//cout << "This username has already existed! Try again\n";
+			return 0;
+		}
+
+		//Sau đó lặp lại quá trình
+	} while (1);
+
+	guess.setUsername(temp);
+	//cout << "Password: ";
+	//getline(cin, temp);
+	temp = password;
+	guess.setPassword(temp);
+	cout << "\n";
+	//Gửi password để server lưu lại
+	bytes = send(server, temp.c_str(), temp.length() + 1, 0);
+	if (bytes <= 0)
+	{
+		return -1;
+	}
+
+	//Nhận thông báo thành công
+	bytes = recv(server, buffer, sizeof(buffer), 0);
+	if (bytes <= 0)
+	{
+		return -1;
+	}
+
+	//cout << "Login sucessfully!\n";
+	return 1;
 }

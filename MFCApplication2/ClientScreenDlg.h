@@ -31,5 +31,8 @@ public:
 	afx_msg void OnBnClickedAboutbox();
 	afx_msg void OnBnClickedbtnrefreshfilelist();
 	afx_msg void OnBnClickedbtnrefreshlog();
-	CListCtrl userLog;
+	afx_msg void OnBnClickedbtnregister();
+	CListBox userList;
+	afx_msg void OnLbnSelchangeList1();
+	CListBox fileList;
 };
