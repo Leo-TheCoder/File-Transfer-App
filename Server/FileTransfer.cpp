@@ -167,3 +167,13 @@ int ReceiveData(SOCKET s, char* data, int size)
 	data[size] = '\0';
 	return result;
 }
+
+int ReadFile(vector<string> list)
+{
+	ifstream file("filelist.txt");
+	if (!file)
+		return -1;
+
+	file.close();
+	return list.size();
+}
