@@ -19,6 +19,8 @@
 #define BYTE_CHUNK 4096
 #define FILE_LIMIT 209715200
 
+using namespace std;
+
 //Kiểm tra login thành công hay không
 //Ret 1: thành công
 //Ret 0: lỗi hoặc nhập sai tên hay mật khẩu
@@ -42,4 +44,16 @@ int FileSend(SOCKET socket, string filename);
 //Ret 1: thành công
 int FileRecv(SOCKET socket);
 
-bool CheckStringVector(vector <string> list, string input);
+//Hàm viết lại màn hình server
+//Đầu tiên clear screen
+//In ra user online
+//In ra list file
+//In ra log
+void RedrawScreen();
+
+//Load từng dòng trong tập tin "filename" vào vector output
+//Trả về số > 0 nếu có các tên tập tin trong file "filename"
+int GetFileList(string filename, vector <string>& output);
+
+//Nhận vào một chuỗi và thêm vào cuối file
+void InsertStrToFile(string str, string filename);

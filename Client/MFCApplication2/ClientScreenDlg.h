@@ -24,8 +24,6 @@ protected:
 public:
 	string ip;
 	SOCKET server;
-	afx_msg void OnBnClickedBtndownload();
-	afx_msg void OnBnClickedBtnupload();
 	afx_msg void OnBnClickedbtnlogin();
 	CStatic staticLoginResult;
 	afx_msg void OnBnClickedAboutbox();

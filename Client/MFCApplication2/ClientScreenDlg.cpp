@@ -53,7 +53,15 @@ void ClientScreenDlg::OnBnClickedbtnlogin()
 	string choice = "1";
 	int iResult = send(server, choice.c_str(), choice.length() + 1, 0);
 	if (iResult == SOCKET_ERROR || iResult == 0) {
-		staticLoginResult.SetWindowText("Send failed!\n");
+		MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+		GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+		GetDlgItem(IDC_username)->EnableWindow(FALSE);
+		GetDlgItem(IDC_password)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 		return;
 	}
 
@@ -126,6 +134,15 @@ void ClientScreenDlg::OnBnClickedbtnrefreshfilelist()
 	string flag = "refreshfilelist";
 	int iResult = send(server, flag.c_str(), flag.length() + 1, 0);
 	if (iResult == SOCKET_ERROR || iResult == 0) {
+		MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+		GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+		GetDlgItem(IDC_username)->EnableWindow(FALSE);
+		GetDlgItem(IDC_password)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 		return;
 	}
 
@@ -134,7 +151,16 @@ void ClientScreenDlg::OnBnClickedbtnrefreshfilelist()
 	while (1) {
 		iResult = recv(server, buf, sizeof(buf), 0);
 
-		if (iResult == 0 || iResult == SOCKET_ERROR) {
+		if (iResult == SOCKET_ERROR || iResult == 0) {
+			MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+			GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+			GetDlgItem(IDC_username)->EnableWindow(FALSE);
+			GetDlgItem(IDC_password)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 			return;
 		}
 
@@ -167,6 +193,15 @@ void ClientScreenDlg::OnBnClickedbtnrefreshlog()
 	string flag = "refreshlog";
 	int iResult = send(server, flag.c_str(), flag.length() + 1, 0);
 	if (iResult == SOCKET_ERROR || iResult == 0) {
+		MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+		GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+		GetDlgItem(IDC_username)->EnableWindow(FALSE);
+		GetDlgItem(IDC_password)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 		return;
 	}
 
@@ -175,7 +210,16 @@ void ClientScreenDlg::OnBnClickedbtnrefreshlog()
 	while (1) {
 		iResult = recv(server, buf, sizeof(buf), 0);
 
-		if (iResult == 0 || iResult == SOCKET_ERROR) {
+		if (iResult == SOCKET_ERROR || iResult == 0) {
+			MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+			GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+			GetDlgItem(IDC_username)->EnableWindow(FALSE);
+			GetDlgItem(IDC_password)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+			GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 			return;
 		}
 
@@ -206,7 +250,15 @@ void ClientScreenDlg::OnBnClickedbtnregister()
 	string choice = "0";
 	int iResult = send(server, choice.c_str(), choice.length() + 1, 0);
 	if (iResult == SOCKET_ERROR || iResult == 0) {
-		staticLoginResult.SetWindowText("Send failed!");
+		MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+		GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+		GetDlgItem(IDC_username)->EnableWindow(FALSE);
+		GetDlgItem(IDC_password)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 		return;
 	}
 
@@ -258,7 +310,15 @@ void ClientScreenDlg::OnBnClickedbtnupload()
 	string choice = "upload";
 	int iResult = send(server, choice.c_str(), choice.length() + 1, 0);
 	if (iResult == SOCKET_ERROR || iResult == 0) {
-		MessageBox(_T("Send failed!"), _T("Send result"), MB_OK | NULL);
+		MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+		GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+		GetDlgItem(IDC_username)->EnableWindow(FALSE);
+		GetDlgItem(IDC_password)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 		return;
 	}
 
@@ -291,7 +351,15 @@ void ClientScreenDlg::OnBnClickedbtndownload()
 	string choice = "download";
 	int iResult = send(server, choice.c_str(), choice.length() + 1, 0);
 	if (iResult == SOCKET_ERROR || iResult == 0) {
-		MessageBox(_T("Send failed!"), _T("Send result"), MB_OK | NULL);
+		MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+		GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+		GetDlgItem(IDC_username)->EnableWindow(FALSE);
+		GetDlgItem(IDC_password)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 		return;
 	}
 
@@ -303,7 +371,15 @@ void ClientScreenDlg::OnBnClickedbtndownload()
 	//send filename
 	iResult = send(server, filename.c_str(), filename.length() + 1, 0);
 	if (iResult == SOCKET_ERROR || iResult == 0) {
-		MessageBox(_T("Send failed!"), _T("Send result"), MB_OK | NULL);
+		MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
+		GetDlgItem(IDC_btnLogIn)->EnableWindow(FALSE);
+		GetDlgItem(IDC_username)->EnableWindow(FALSE);
+		GetDlgItem(IDC_password)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRegister)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshFileList)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnRefreshLog)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnDownload)->EnableWindow(FALSE);
+		GetDlgItem(IDC_btnUpload)->EnableWindow(FALSE);
 		return;
 	}
 

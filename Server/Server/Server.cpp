@@ -50,8 +50,9 @@ DWORD WINAPI threadClient(LPVOID socket)
 
 	
 	sendStr = "Client #" + usernameStr + " has connected\n";
-	cout << sendStr;								//Xuất log trên server
+	//cout << sendStr;								//Xuất log trên server
 	logServer.push_back(sendStr);
+	RedrawScreen();
 
 	/*
 	for (int i = 0; i < clients.size(); i++)		//Xuất log đến các client khác
@@ -85,6 +86,7 @@ DWORD WINAPI threadClient(LPVOID socket)
 				}
 				string toSend = "endlog";
 				int iResult = send(client, toSend.c_str(), toSend.length() + 1, 0);
+				RedrawScreen();
 			}
 
 			if (strcmp(buffer, "refreshfilelist") == 0)	//Nếu client nhập refreshfilelist thì gửi lại file list
@@ -96,6 +98,7 @@ DWORD WINAPI threadClient(LPVOID socket)
 				}
 				string toSend = "endlist";
 				int iResult = send(client, toSend.c_str(), toSend.length() + 1, 0);
+				RedrawScreen();
 			}
 
 			if (strcmp(buffer, "upload") == 0)	//Nếu client nhập upload thì nhận upload
@@ -103,8 +106,9 @@ DWORD WINAPI threadClient(LPVOID socket)
 				int iResult = FileRecv(client);
 				if (iResult == 1) {
 					string logStr = "Client #" + usernameStr + " uploaded a file\n";
-					cout << logStr;
+					//cout << logStr;
 					logServer.push_back(logStr);
+					RedrawScreen();
 				}
 			}
 
@@ -118,8 +122,9 @@ DWORD WINAPI threadClient(LPVOID socket)
 				iResult = FileSend(client, filename);
 				if (iResult == 1) {
 					string logStr = "Client #" + usernameStr + " downloaded a file\n";
-					cout << logStr;
+					//cout << logStr;
 					logServer.push_back(logStr);
+					RedrawScreen();
 				}
 			/*	else if (iResult == -1) {
 					string toSend = "-1";
@@ -136,14 +141,29 @@ DWORD WINAPI threadClient(LPVOID socket)
 	}
 	
 	sendStr = "Client #" + usernameStr + " has disconnected\n";	//Xuất log ra server
-	cout << sendStr;
+	//cout << sendStr;
 	logServer.push_back(sendStr);
 
 	users.setUserStatusByName(usernameStr, false);
 
+	for (int i = 0; i < username.size(); i++) {
+		string tmp = username[i];
+		if (usernameStr == tmp) {
+			if (username.size() == 1) {
+				username.pop_back();
+				break;
+			}
+			else {
+				username.erase(username.begin() + i);
+				break;
+			}
+		}
+	}
+	RedrawScreen();
+
 	//Xuất log ra các client còn lại
 	//Thông báo việc đăng xuất của client này
-	for (int i = 0; i < clients.size(); i++)					
+	/*for (int i = 0; i < clients.size(); i++)					
 	{							
 		//Với client hiện tại thì loại bỏ nó khỏi các danh sách hoạt động 
 		if (client == clients[i])
@@ -152,16 +172,18 @@ DWORD WINAPI threadClient(LPVOID socket)
 			clients.erase(clients.begin(), clients.begin() + i);
 			clients_sin.erase(clients_sin.begin(), clients_sin.begin() + i);
 			username.erase(username.begin(), username.begin() + i);
+			RedrawScreen();
 			break;
 		}
-		
+	
 	}
+	RedrawScreen();*/
 
-	for (int i = 0; i < clients.size(); i++)
+	/*for (int i = 0; i < clients.size(); i++)
 	{
 		//Gửi thông báo đến client khác
 		bytes = send(clients[i], sendStr.c_str(), sendStr.length() + 1, 0);
-	}
+	}*/
 	
 	//Thoát thread
 	return 0;
@@ -223,6 +245,10 @@ int main()
 		return 1;
 	}
 	
+	int iReadFile = GetFileList("filelist.txt", fileList);
+
+	RedrawScreen();
+
 	SOCKET tmpClient;							
 	sockaddr_in tmpClient_sin;					
 	int len_sin = sizeof(tmpClient_sin);		
@@ -241,7 +267,7 @@ int main()
 		//Thread dùng để giải quyết riêng với client
 		clientThread = CreateThread(NULL, 0, threadClient, (LPVOID)myClient, 0, &thread);
 		Sleep(50);
-
+		RedrawScreen();
 	}
 
 	//Close socket
@@ -511,15 +537,60 @@ int FileRecv(SOCKET socket)
 
 	string nameInString(filename);
 	fileList.push_back(filename);
+	InsertStrToFile(filename, "filelist.txt");
 	delete[] filename;
 	return 1;
 }
 
-bool CheckStringVector(vector <string> list, string input) {
-	for (int i = 0; i < list.size(); i++) {
-		if (input == list[i]) {
-			return true;
-		}
+void RedrawScreen() {
+	system("cls");
+
+	//in list user online
+	cout << "Users online:\n";
+	for (int i = 0; i < username.size(); i++) {
+		cout << " - " << username[i] << endl;
 	}
-	return false;
+
+	cout << endl;
+
+	//in list file
+	cout << "List of files:\n";
+	for (int i = 0; i < fileList.size(); i++) {
+		cout << " - " << fileList[i] << endl;
+	}
+
+	cout << endl;
+
+	//in log
+	cout << "Users' log:\n";
+	for (int i = 0; i < logServer.size(); i++) {
+		cout << " - " << logServer[i] << endl;
+	}
+}
+
+int GetFileList(string filename, vector <string>& output)
+{
+	output.clear();
+	ifstream file(filename);
+	if (!file.is_open())
+	{
+		cout << "Can't read file list. " << endl;
+		return -1;
+	}
+	string name;
+	while (getline(file, name))
+	{
+		output.push_back(name);
+	}
+	file.close();
+	return output.size();
+}
+
+void InsertStrToFile(string str, string filename)
+{
+	ofstream file(filename, ios::app);
+	if (!file.is_open())
+		return;
+	file << str << endl;
+	file.close();
 }
