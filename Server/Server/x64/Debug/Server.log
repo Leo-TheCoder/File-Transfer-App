@@ -1,0 +1,9 @@
+﻿  Server.cpp
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(94,71): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(98,70): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(105,71): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(109,70): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(116,70): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(157,68): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(268,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Server.vcxproj -> D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\x64\Debug\Server.exe

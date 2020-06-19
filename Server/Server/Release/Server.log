@@ -1,0 +1,16 @@
+﻿  Server.cpp
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(81,23): warning C4018: '<': signed/unsigned mismatch
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(92,23): warning C4018: '<': signed/unsigned mismatch
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(146,20): warning C4018: '<': signed/unsigned mismatch
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(160,20): warning C4018: '<': signed/unsigned mismatch
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(270,16): warning C4018: '<': signed/unsigned mismatch
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(373,15): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(403,12): warning C4244: 'initializing': conversion from 'std::streamsize' to 'int', possible loss of data
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(413,19): warning C4018: '<': signed/unsigned mismatch
+D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Server\Server.cpp(519,20): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  2 of 483 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    9 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Server.vcxproj -> D:\Uni\Nam 2 - HKII\MMT\TH\Do An Socket\File-Transfer-App-master (1)\File-Transfer-App-master\Release\Server.exe

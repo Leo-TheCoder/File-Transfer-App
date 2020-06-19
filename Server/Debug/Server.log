@@ -1,7 +1,0 @@
-﻿  Server.cpp
-F:\MMT\Project_Server_Client\Server\Server.cpp(35,11): warning C4101:  'pClientHostEnt': unreferenced local variable
-F:\MMT\Project_Server_Client\Server\Server.cpp(37,7): warning C4101:  'Buffer': unreferenced local variable
-F:\MMT\Project_Server_Client\Server\Server.cpp(34,7): warning C4101:  'ClientAddr': unreferenced local variable
-F:\MMT\Project_Server_Client\Server\Server.cpp(38,6): warning C4101:  'length': unreferenced local variable
-F:\MMT\Project_Server_Client\Server\Server.cpp(32,6): warning C4101:  'addrlen': unreferenced local variable
-  Server.vcxproj -> F:\MMT\Project_Server_Client\Debug\Server.exe
